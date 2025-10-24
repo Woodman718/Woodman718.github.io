@@ -1,21 +1,42 @@
-### **Software Engineer Intern**  
-**January 2025 – June 2025 | ByteDance**  
+### **University Lecturer**  
+**Apr 2024 – Present | Chongqing College of International Business and Economics**  
 
-Worked on the development and optimization of large-scale recommendation systems, focusing on algorithm improvements and system efficiency enhancements. Contributed to real-time data processing pipelines and model optimization for personalized content delivery.
+Responsible for teaching undergraduate courses in computer science and data analysis. Focused on enhancing students’ understanding of artificial intelligence applications and cultivating hands-on programming skills.
 
-#### Key Contributions:  
-- Developed and optimized recommendation algorithms to enhance user engagement and content relevance.  
-- Designed and implemented real-time data processing workflows to improve model inference efficiency.  
-- Conducted A/B testing and performance analysis to refine recommendation strategies based on user behavior data.  
+#### Key Contributions: 
+- Taught core courses such as Python Programming, Computer Networks, and Introduction to Artificial Intelligence.
+- Supervising student projects and promoting applied AI education.
 
 ---
+### **Research Assistant**  
+**Jan 2024 – Mar 2025| Chongqing Medical University**  
 
-### **软件工程师实习生**  
-**2025年1月 – 2025年6月 | 字节跳动**  
+Conducted single-cell sequencing and integrated data analysis with a focus on algorithm optimization and system performance improvement. Built and maintained a microbial primer database (Virus, Fungi, Bacteria), providing critical bioinformatics resources for research and clinical applications.
 
-负责大规模推荐系统的开发与优化，专注于算法改进和系统效率提升。参与实时数据处理管道的构建，并优化模型推理流程，以提升个性化内容推荐效果。
+#### Key Contributions:  
+- Developed automated pipelines for single-cell sequencing analysis.
+- Designed the cross-species primer database architecture.
+- Established and documented R language environments on research servers.
+- Authored user guides and provided regular technical training for graduate students. 
+
+---
+### **计算机专任教师**  
+**2024年1月 – 2025年3月 | 重庆医科大学**  
+
+负责教授计算机科学和数据分析方面的本科课程。致力于加深学生对人工智能应用的理解，并培养他们的实际编程技能。
 
 #### 主要贡献:  
-- 研发并优化推荐算法，提高用户互动率和内容相关性。  
-- 设计并实现实时数据处理流程，提升模型推理的计算效率。  
-- 进行A/B测试与性能分析，基于用户行为数据优化推荐策略。
+- 教授了诸如“Python 编程”、“计算机网络”和“人工智能入门”等核心课程。
+- 监督学生项目并推动应用型人工智能教育的发展。
+
+---
+### **科研助理**  
+**2024年1月 – 2025年3月 | 重庆医科大学**  
+
+负责单细胞测序的barcode分析，并对数据进行了整合分析，重点在于算法优化和系统性能提升。构建并维护了一个微生物引物数据库（病毒、真菌、细菌），为研究和临床应用提供了关键的生物信息学资源。
+
+#### 主要贡献:  
+- 开发了用于单细胞测序分析的自动化流程。
+- 设计了跨物种引物数据库架构。
+- 在研究服务器上建立了并记录了 R 语言环境。
+- 编写了用户指南，并为研究生提供了定期的技术培训。
