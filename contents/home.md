@@ -6,7 +6,7 @@
 <code>caisongbai@126.com</code>  
 
 #### Education  
-**Chongqing Jiaotong University**, Master of Engineering (2020 – 2023)  
+**Chongqing Jiaotong University**, Master of Engineering, 2023 
 
 #### Research Interests  
 deep learning, computer-aided medical diagnosis and prognosis, bioinformatics analysis.
