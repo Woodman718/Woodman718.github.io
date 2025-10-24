@@ -1,11 +1,11 @@
 ### **University Lecturer**  
-**Apr 2024 – Present | Chongqing College of International Business and Economics**  
+**Apr 2025 – Present | Chongqing College of International Business and Economics**  
 
-Responsible for teaching undergraduate courses in computer science and data analysis. Focused on enhancing students’ understanding of artificial intelligence applications and cultivating hands-on programming skills.
+Responsible for teaching undergraduate courses in computer science and data analysis. Dedicated to deepening students’ understanding of fundamental knowledge and AI applications, while fostering their practical programming skills.
 
 #### Key Contributions: 
 - Taught core courses such as Python Programming, Computer Networks, and Introduction to Artificial Intelligence.
-- Supervising student projects and promoting applied AI education.
+- Supervised student projects and promoted the development of applied AI education.
 
 ---
 ### **Research Assistant**  
@@ -21,12 +21,12 @@ Conducted single-cell sequencing and integrated data analysis with a focus on al
 
 ---
 ### **计算机专任教师**  
-**2024年1月 – 2025年3月 | 重庆医科大学**  
+**2025年4月 – 至今 | 重庆对外经贸大学**  
 
-负责教授计算机科学和数据分析方面的本科课程。致力于加深学生对人工智能应用的理解，并培养他们的实际编程技能。
+负责教授计算机科学和数据分析方面的本科课程。致力于帮助学生加深对基础知识和人工智能应用的理解，同时培养他们的实际编程能力。
 
 #### 主要贡献:  
-- 教授了诸如“Python 编程”、“计算机网络”和“人工智能入门”等核心课程。
+- 教授了诸如“Python 编程”、“计算机网络”和“人工智能导论”等核心课程。
 - 监督学生项目并推动应用型人工智能教育的发展。
 
 ---
