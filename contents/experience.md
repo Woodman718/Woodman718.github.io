@@ -16,7 +16,7 @@ Conducted single-cell sequencing and integrated data analysis with a focus on al
 #### Key Contributions:  
 - Developed automated pipelines for single-cell sequencing analysis.
 - Designed the cross-species primer database architecture.
-- Established and documented R language environments on research servers.
+- Established R language environments on research servers.
 - Authored user guides and provided regular technical training for graduate students. 
 
 ---
@@ -38,5 +38,5 @@ Conducted single-cell sequencing and integrated data analysis with a focus on al
 #### 主要贡献:  
 - 开发了用于单细胞测序分析的自动化流程。
 - 设计了跨物种引物数据库架构。
-- 在研究服务器上建立了并记录了 R 语言环境。
+- 在服务器上构建 R 语言环境。
 - 编写了用户指南，并为研究生提供了定期的技术培训。
