@@ -1,192 +1,253 @@
-<!DOCTYPE html>
-<html lang="en">
+<!-- 找到 <head> 区域，在其他 css 链接下面添加这个 CSS 以确保 3D 画布样式正确 -->
+<style>
+    /* 新增的 3D Header 样式，稍后你可以移到 main.css 中 */
+    #canvas-container {
+        position: relative;
+        width: 100%;
+        height: 60vh; /* 这里的 60vh 替代了原本的 25rem */
+        overflow: hidden;
+        background: #000;
+        margin-top: 0; 
+    }
+    
+    /* 覆盖在 3D 上的文字容器 */
+    .hero-overlay {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        text-align: center;
+        z-index: 2;
+        pointer-events: none; /* 让鼠标穿透文字操作 3D */
+    }
 
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="Academic Webpage" />
-    <meta name="author" content="yixin0313" />
-    <title id="title"></title>
+    /* 你的座右铭文字样式优化 */
+    #top-section-bg-text {
+        font-family: 'Newsreader', serif; /* 使用你引入的 Newsreader 字体 */
+        font-style: italic;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.9);
+        text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        mix-blend-mode: overlay; /* 让文字融入背景 */
+    }
 
-    <!-- Icon -->
-    <link rel="icon" type="image/x-icon" href="static/assets/favicon.ico" />
+    /* 调整头像位置，使其悬浮在 Header 和 内容之间 */
+    #avatar-container {
+        position: absolute;
+        top: 60vh; /* 跟随 Header 高度 */
+        right: 10%; /* 放在右侧，或者根据你的喜好调整 */
+        transform: translateY(-50%); /* 垂直居中于分界线 */
+        z-index: 100;
+    }
+    
+    #avatar-container img {
+        width: 180px; /* 调整头像大小 */
+        height: 180px;
+        object-fit: cover;
+        border: 4px solid white;
+        border-radius: 4px; /* 方形圆角比圆形更适合这种硬朗风格 */
+        box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+    
+    /* 移动端适配 */
+    @media (max-width: 768px) {
+        #avatar-container {
+            position: relative;
+            top: -50px;
+            right: auto;
+            transform: none;
+            display: flex;
+            justify-content: center;
+            margin-bottom: -50px;
+        }
+    }
+</style>
 
-    <!-- Bootstrap icons-->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
-
-    <!-- Google fonts-->
-    <link rel="preconnect" href="https://fonts.gstatic.com" />
-    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,600;1,600&amp;display=swap"
-        rel="stylesheet" />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,300;0,500;0,600;0,700;1,300;1,500;1,600;1,700&amp;display=swap"
-        rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,400;1,400&amp;display=swap"
-        rel="stylesheet" />
-
-    <!-- Core theme CSS (includes Bootstrap)-->
-    <link type="text/css" href="static/css/styles.css" rel="stylesheet" />
-    <link type="text/css" href="static/css/main.css" rel="stylesheet" />
-
-    <!-- Bootstrap core JS-->
-    <script type="text/javascript" src="static/js/bootstrap.bundle.min.js"></script>
-
-    <!-- For Compatability -->
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-
-    <!-- Markdown -->
-    <script type="text/javascript" src="static/js/marked.min.js"></script>
-
-    <!-- Mathematics -->
-    <script>
-        // See https://docs.mathjax.org/en/latest/index.html for more details.
-        MathJax = {
-            tex: {
-                packages: {},              // extensions to use
-                inlineMath: [              // start/end delimiter pairs for in-line math
-                    ['$', '$'],
-                    ['\\(', '\\)']
-                ],
-                displayMath: [             // start/end delimiter pairs for display math
-                    ['$$', '$$'],
-                    ['\\[', '\\]']
-                ],
-                processEscapes: false,      // use \$ to produce a literal dollar sign
-                processEnvironments: true, // process \begin{xxx}...\end{xxx} outside math mode
-                processRefs: true,         // process \ref{...} outside of math mode
-                digits: /^(?:[0-9]+(?:\{,\}[0-9]{3})*(?:\.[0-9]*)?|\.[0-9]+)/,    // pattern for recognizing numbers
-                tags: 'all',              // or 'ams' or 'all'
-                tagSide: 'right',          // side for \tag macros
-                tagIndent: '0.8em',        // amount to indent tags
-                useLabelIds: true,         // use label name rather than tag for ids
-                maxMacros: 10000,          // maximum number of macro substitutions per expression
-                maxBuffer: 5 * 1024,       // maximum size for the internal TeX string (5K)
-                // baseURL:                   // URL for use with links to tags (when there is a <base> tag in effect)
-                // (document.getElementsByTagName('base').length === 0) ? '' : String(document.location).replace(/#.*$/, ''),
-                formatError:               // function called when TeX syntax errors occur
-                    (jax, err) => jax.formatError(err)
-            }
-        };
-    </script>
-    <script type="text/javascript" id="MathJax-script"
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
-    <script type="text/javascript" id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
-    <!-- Core JS-->
-    <script type="text/javascript" src="static/js/scripts.js"></script>
-    <script type="text/javascript" src="static/js/js-yaml.min.js"></script>
-
+<!-- 引入 Three.js 映射 -->
+<script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
+        }
+    }
+</script>
 </head>
 
 <body id="page-top">
-    <!-- Navigation-->
+    <!-- 导航栏保持不变 (建议稍后在 CSS 中将背景改为半透明) -->
     <nav class="header navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
+        <!-- ... 你的导航栏代码保持原样 ... -->
         <div class="container px-5">
-            <a id="page-top-title" class="navbar-brand fw-bold" href="#page-top"></a>
-            <!-- <a href="#page-top"><img src="static/assets/img/CUMT_LOGO.svg" style="width: 11rem;"></a> -->
+            <a id="page-top-title" class="navbar-brand fw-bold" href="#page-top">Woodman</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
                 aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                MENU
-                <i class="bi-list"></i>
+                MENU <i class="bi-list"></i>
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
-                <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link me-lg-3" href="#home">HOME</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link me-lg-3" href="#publications">PUBLICATIONS</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link me-lg-3" href="#experience">EXPERIENCE</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link me-lg-3" href="#awards">AWARDS</a>
-                    </li>
+                 <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
+                    <li class="nav-item"><a class="nav-link me-lg-3" href="#home">HOME</a></li>
+                    <li class="nav-item"><a class="nav-link me-lg-3" href="#publications">PUBLICATIONS</a></li>
+                    <li class="nav-item"><a class="nav-link me-lg-3" href="#experience">EXPERIENCE</a></li>
+                    <li class="nav-item"><a class="nav-link me-lg-3" href="#awards">AWARDS</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Top Section -->
-    <section class="top-section" style="background-image: url('static/assets/img/background2.jpeg');">
-        <div class="top-section-content">
-            <div class="container px-5">
-                <h2 id="top-section-bg-text" class="text-white display-3 lh-1 font-alt"></h2>
-            </div>
-        </div>
-    </section>
-    <!-- Top Section -->
-
-    <!-- Photo -->
-    <div class="container px-5">
-        <div id="avatar">
-            <img class="shadow" src="static/assets/img/photo.png">
+    <!-- [删除] 原来的 <section class="top-section"> ... </section> -->
+    
+    <!-- [新增] 3D Header 区域 -->
+    <div id="canvas-container">
+        <!-- 这里的文字容器 ID 保持原样，为了兼容你现有的 scripts.js 填充文字 -->
+        <div class="hero-overlay">
+            <h2 id="top-section-bg-text" class="display-3 lh-1">
+                Endless training,<br>boundless exploration
+            </h2>
         </div>
     </div>
-    <!-- Photo -->
 
+    <!-- [修改] 头像区域 -->
+    <!-- 我重新包装了一个 ID 以便更好地控制悬浮位置 -->
+    <div id="avatar-container">
+        <img src="static/assets/img/photo.png" alt="Profile Photo">
+    </div>
+
+    <!-- 下面的 Home, Publications 等 Section 保持原样即可 -->
     <!-- Home -->
-    <section class="bg-gradient-primary-to-secondary-light mt5 md5" id="home">
+    <section class="bg-gradient-primary-to-secondary-light mt5 md5" id="home" style="padding-top: 80px;">
+        <!-- ... 保持原样 ... -->
         <div class="container px-5">
             <header>
                 <h2 id="home-subtitle"> </h2>
-                <!-- <span class="bi bi-list"></span> -->
             </header>
             <div class="main-body" id="home-md"></div>
         </div>
     </section>
-    <!-- Home -->
+    
+    <!-- ... Publications, Experience, Awards, Footer 保持原样 ... -->
 
-    <!-- Publications -->
-    <section class="bg-gradient-primary-to-secondary-gray mt5 md5" id="publications">
-        <div class="container px-5">
-            <header>
-                <h2 id="publications-subtitle"><i class="bi bi-file-text-fill"></i>&nbsp;PUBLICATIONS</h2>
-            </header>
-            <div class="main-body" id="publications-md"></div>
+    <!-- ... 你的其他 script 引用 ... -->
+    <script type="text/javascript" src="static/js/scripts.js"></script>
 
-        </div>
-    </section>
-    <!-- Publications  -->
+    <!-- [新增] 放在 </body> 之前：Three.js 核心逻辑 -->
+    <script type="module">
+        import * as THREE from 'three';
 
-    <!-- Experience -->
-    <section class="bg-gradient-primary-to-secondary-dark mt5 md5" id="experience">
-        <div class="container px-5">
-            <header>
-                <h2 id="experience-subtitle"><i class="bi bi-briefcase-fill"></i> EXPERIENCE </h2>
-            </header>
-            <div class="main-body" id="experience-md"></div>
-        </div>
-    </section>
-    <!-- Experience -->
+        // 配置：使用你原来的背景图路径
+        const bgImageURL = 'static/assets/img/background2.jpeg'; 
+        
+        const container = document.getElementById('canvas-container');
+        
+        // 1. 初始化场景
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(70, container.clientWidth / container.clientHeight, 0.01, 10);
+        camera.position.z = 1;
 
-    <!-- Awards -->
-    <section class="bg-gradient-primary-to-secondary-light mt5 md5" id="awards">
-        <div class="container px-5">
-            <header>
-                <h2 id="awards-subtitle"><i class="bi bi-award-fill"></i>AWARDS </h2>
-            </header>
-            <div class="main-body" id="awards-md"></div>
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        container.appendChild(renderer.domElement);
 
-        </div>
-    </section>
-    <!-- Awards -->
+        // 2. Shader (液态扭曲特效)
+        const vertexShader = `
+            uniform float uTime;
+            uniform vec2 uMouse;
+            varying vec2 vUv;
+            varying float vWave;
+            void main() {
+                vUv = uv;
+                vec3 pos = position;
+                float dist = distance(uv, uMouse);
+                float decay = clamp(1.0 - dist * 3.0, 0.0, 1.0);
+                float wave = sin(uv.x * 10.0 + uTime) * 0.01 + sin(uv.y * 12.0 + uTime * 0.8) * 0.01;
+                float mouseWave = sin(dist * 20.0 - uTime * 5.0) * 0.03 * decay;
+                pos.z += wave + mouseWave;
+                vWave = wave + mouseWave;
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+            }
+        `;
 
-    <!-- Footer-->
-    <footer class="bg-bottom text-center py-5">
-        <div class="container px-5">
-            <div class="text-white-50 small">
-                <div id="copyright-text" class="mb-2"></div>
-                <a id="github-link" href="https://github.com/senli1073">Github</a>
-                <span class="mx-1">&middot;</span>
-                <a id="license-link"
-                    href="https://github.com/senli1073/senli1073.github.io/blob/main/LICENSE">License</a>
-            </div>
-        </div>
-    </footer>
+        const fragmentShader = `
+            uniform sampler2D uTexture;
+            uniform vec2 uImageSize;
+            uniform vec2 uContainerSize;
+            varying vec2 vUv;
+            varying float vWave;
+            
+            vec2 getCoverUv(vec2 uv, vec2 resolution, vec2 texResolution) {
+                vec2 s = resolution;
+                vec2 i = texResolution;
+                float rs = s.x / s.y;
+                float ri = i.x / i.y;
+                vec2 new = rs < ri ? vec2(i.x * s.y / i.y, s.y) : vec2(s.x, i.y * s.x / i.x);
+                vec2 offset = (rs < ri ? vec2((new.x - s.x) / 2.0, 0.0) : vec2(0.0, (new.y - s.y) / 2.0)) / new;
+                return uv * s / new + offset;
+            }
 
+            void main() {
+                vec2 uv = getCoverUv(vUv, uContainerSize, uImageSize);
+                // RGB Shift 色散效果
+                float r = texture2D(uTexture, uv + vWave * 0.02).r;
+                float g = texture2D(uTexture, uv).g;
+                float b = texture2D(uTexture, uv - vWave * 0.02).b;
+                // 稍微压暗一点背景，让文字更突出
+                gl_FragColor = vec4(vec3(r, g, b) * 0.8, 1.0);
+            }
+        `;
+
+        // 3. 加载图片并运行
+        const textureLoader = new THREE.TextureLoader();
+        textureLoader.load(bgImageURL, (texture) => {
+            const geometry = new THREE.PlaneGeometry(2, 2, 64, 64);
+            const material = new THREE.ShaderMaterial({
+                vertexShader,
+                fragmentShader,
+                uniforms: {
+                    uTime: { value: 0 },
+                    uMouse: { value: new THREE.Vector2(0.5, 0.5) },
+                    uTexture: { value: texture },
+                    uContainerSize: { value: new THREE.Vector2(container.clientWidth, container.clientHeight) },
+                    uImageSize: { value: new THREE.Vector2(texture.image.width, texture.image.height) }
+                }
+            });
+            const mesh = new THREE.Mesh(geometry, material);
+            scene.add(mesh);
+
+            // 交互
+            const clock = new THREE.Clock();
+            let targetMouse = new THREE.Vector2(0.5, 0.5);
+            let currentMouse = new THREE.Vector2(0.5, 0.5);
+
+            document.addEventListener('mousemove', (e) => {
+                const rect = container.getBoundingClientRect();
+                // 只有鼠标在 header 区域或附近时才触发强烈波纹
+                if (e.clientY <= rect.bottom + 100) { 
+                   targetMouse.x = (e.clientX - rect.left) / rect.width;
+                   targetMouse.y = 1.0 - (e.clientY - rect.top) / rect.height;
+                }
+            });
+
+            function animate() {
+                requestAnimationFrame(animate);
+                const time = clock.getElapsedTime();
+                material.uniforms.uTime.value = time;
+                currentMouse.x += (targetMouse.x - currentMouse.x) * 0.05;
+                currentMouse.y += (targetMouse.y - currentMouse.y) * 0.05;
+                material.uniforms.uMouse.value = currentMouse;
+                renderer.render(scene, camera);
+            }
+            animate();
+            
+            window.addEventListener('resize', () => {
+                const w = container.clientWidth;
+                const h = container.clientHeight;
+                renderer.setSize(w, h);
+                camera.aspect = w / h;
+                camera.updateProjectionMatrix();
+                material.uniforms.uContainerSize.value.set(w, h);
+            });
+        });
+    </script>
 </body>
-
 </html>
