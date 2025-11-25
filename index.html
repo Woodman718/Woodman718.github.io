@@ -24,11 +24,12 @@
     <link type="text/css" href="static/css/styles.css" rel="stylesheet" />
     <link type="text/css" href="static/css/main.css" rel="stylesheet" />
 
-    <!-- Three.js Import Map (CDN) -->
+    <!-- Three.js Import Map (CDN) - 增加了 addons 以支持后期处理 -->
     <script type="importmap">
         {
             "imports": {
-                "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
             }
         }
     </script>
@@ -74,11 +75,11 @@
         </div>
     </nav>
 
-    <!-- --- 3D Header Section (替换了原来的 .top-section) --- -->
+    <!-- --- 3D Header Section --- -->
     <div id="canvas-container">
         <div class="hero-overlay">
-            <!-- ID 保持不变，scripts.js 会自动填充这里的文字 -->
-            <h2 id="top-section-bg-text" class="display-3 lh-1 font-alt">Loading...</h2>
+            <!-- 文字会被 scripts.js 自动填充 -->
+            <h2 id="top-section-bg-text" class="display-3 lh-1 font-alt"></h2>
         </div>
     </div>
 
@@ -140,81 +141,143 @@
     <!-- Core JS -->
     <script type="text/javascript" src="static/js/scripts.js"></script>
 
-    <!-- --- Three.js 逻辑 (放在最后) --- -->
+    <!-- --- Awwwards Level WebGL Logic --- -->
     <script type="module">
         import * as THREE from 'three';
+        // 引入后期处理模块 (Post-processing)
+        import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+        import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+        import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 
-        // 1. 配置: 指向你现有的背景图
-        const bgImageURL = 'static/assets/img/background2.jpeg';
-        
+        // 1. 配置
+        const bgImageURL = 'static/assets/img/background2.jpeg'; 
         const container = document.getElementById('canvas-container');
         
-        // 2. 初始化场景
+        // 2. 场景初始化
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(70, container.clientWidth / container.clientHeight, 0.01, 10);
-        camera.position.z = 1;
+        // 透视摄像机
+        const camera = new THREE.PerspectiveCamera(70, container.clientWidth / container.clientHeight, 0.01, 100);
+        camera.position.z = 1; // 摄像机距离平面的距离
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        const renderer = new THREE.WebGLRenderer({ 
+            antialias: false, // 关闭原生抗锯齿，交给 Post-processing
+            alpha: true,
+            powerPreference: "high-performance"
+        });
         renderer.setSize(container.clientWidth, container.clientHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.toneMapping = THREE.ACESFilmicToneMapping; // 电影级色调映射
+        renderer.toneMappingExposure = 1.2;
         container.appendChild(renderer.domElement);
 
-        // 3. Shader 代码 (液态变形特效)
+        // 3. 后期处理管道 (Bloom Effect)
+        const renderScene = new RenderPass(scene, camera);
+        
+        // Bloom 参数: 分辨率, 强度, 半径, 阈值
+        const bloomPass = new UnrealBloomPass(new THREE.Vector2(container.clientWidth, container.clientHeight), 1.5, 0.4, 0.85);
+        bloomPass.threshold = 0.1; // 亮度超过这个值的像素发光
+        bloomPass.strength = 0.6;  // 发光强度 (可以调高)
+        bloomPass.radius = 0.5;    // 发光半径
+
+        const composer = new EffectComposer(renderer);
+        composer.addPass(renderScene);
+        composer.addPass(bloomPass);
+
+        // 4. 自定义 Shader (支持 Cover 缩放 + 液态 + 色散)
         const vertexShader = `
             uniform float uTime;
             uniform vec2 uMouse;
+            uniform vec2 uResolution;
             varying vec2 vUv;
             varying float vWave;
+
             void main() {
                 vUv = uv;
                 vec3 pos = position;
-                float dist = distance(uv, uMouse);
-                // 鼠标影响范围和强度
-                float decay = clamp(1.0 - dist * 2.5, 0.0, 1.0);
-                // 基础流动波浪 + 鼠标交互波浪
-                float wave = sin(uv.x * 5.0 + uTime * 0.5) * 0.02 + sin(uv.y * 6.0 + uTime * 0.5) * 0.02;
-                float mouseWave = sin(dist * 15.0 - uTime * 8.0) * 0.05 * decay;
-                pos.z += wave + mouseWave;
-                vWave = wave + mouseWave;
+
+                // 将 UV 坐标转换为相对于屏幕中心的坐标 (-1 到 1)
+                // 这样可以计算真正的物理距离
+                float aspect = uResolution.x / uResolution.y;
+                vec2 aspectUV = (uv - 0.5) * vec2(aspect, 1.0);
+                vec2 mouseAspect = (uMouse - 0.5) * vec2(aspect, 1.0);
+
+                float dist = distance(aspectUV, mouseAspect);
+                
+                // 鼠标涟漪衰减
+                float decay = clamp(1.0 - dist * 1.5, 0.0, 1.0);
+                
+                // 复杂的液态波浪算法 (叠加多个正弦波)
+                float wave1 = sin(uv.x * 4.0 + uTime * 0.5);
+                float wave2 = sin(uv.y * 6.0 + uTime * 0.8);
+                float mouseWave = sin(dist * 20.0 - uTime * 8.0) * 0.1 * decay;
+
+                // 将波浪应用到 Z 轴，让图片有起伏
+                pos.z += (wave1 * wave2) * 0.05 + mouseWave;
+                
+                vWave = mouseWave; // 传递给片元着色器用于色散
+
                 gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
             }
         `;
 
         const fragmentShader = `
             uniform sampler2D uTexture;
-            uniform vec2 uImageSize;
-            uniform vec2 uContainerSize;
+            uniform vec2 uImageRes;
+            uniform vec2 uContainerRes;
             varying vec2 vUv;
             varying float vWave;
-            
-            // CSS 'background-size: cover' 的 GLSL 实现
-            vec2 getCoverUv(vec2 uv, vec2 resolution, vec2 texResolution) {
-                vec2 s = resolution;
-                vec2 i = texResolution;
+
+            // --- 核心算法：模拟 background-size: cover ---
+            vec2 getCoverUv(vec2 uv) {
+                vec2 s = uContainerRes; // Screen resolution
+                vec2 i = uImageRes;     // Image resolution
+                
                 float rs = s.x / s.y;
                 float ri = i.x / i.y;
+                
                 vec2 new = rs < ri ? vec2(i.x * s.y / i.y, s.y) : vec2(s.x, i.y * s.x / i.x);
                 vec2 offset = (rs < ri ? vec2((new.x - s.x) / 2.0, 0.0) : vec2(0.0, (new.y - s.y) / 2.0)) / new;
+                
                 return uv * s / new + offset;
             }
 
             void main() {
-                vec2 uv = getCoverUv(vUv, uContainerSize, uImageSize);
-                // RGB 色散效果 (Chromatic Aberration)
-                float r = texture2D(uTexture, uv + vWave * 0.03).r;
-                float g = texture2D(uTexture, uv).g;
-                float b = texture2D(uTexture, uv - vWave * 0.03).b;
+                vec2 uv = getCoverUv(vUv);
+
+                // 简单的边界检查，防止缩放后边缘拉伸
+                if(uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0) {
+                    discard; 
+                }
+
+                // RGB Shift (色散故障效果)
+                // 基于 vWave (鼠标交互强度) 偏移 RGB 通道
+                float shiftStrength = 0.03 + vWave * 0.2; 
                 
-                // 叠加黑色遮罩 (类似于 CSS rgba(0,0,0,0.4)) 以保证文字清晰度
-                vec3 color = vec3(r, g, b) * 0.6; 
-                gl_FragColor = vec4(color, 1.0);
+                float r = texture2D(uTexture, uv + vec2(shiftStrength, 0.0)).r;
+                float g = texture2D(uTexture, uv).g;
+                float b = texture2D(uTexture, uv - vec2(shiftStrength, 0.0)).b;
+
+                // 增加一点对比度
+                vec3 color = vec3(r, g, b);
+                
+                // 稍微调暗一点，让上面的白色文字更清晰，同时让 Bloom 更有层次
+                gl_FragColor = vec4(color * 0.9, 1.0);
             }
         `;
 
-        // 4. 加载材质并启动
+        // 5. 加载资源并创建物体
         const textureLoader = new THREE.TextureLoader();
         textureLoader.load(bgImageURL, (texture) => {
-            const geometry = new THREE.PlaneGeometry(2, 2, 64, 64);
+            
+            // 必须设置纹理过滤，防止缩放锯齿
+            texture.minFilter = THREE.LinearFilter;
+            texture.magFilter = THREE.LinearFilter;
+
+            // 创建一个填满摄像机视角的平面
+            // 2x2 的平面在 z=0, camera z=1, fov=70 左右时需要微调，或者直接计算视口大小
+            // 这里我们用一个足够大的平面，依靠 Shader 裁剪
+            const geometry = new THREE.PlaneGeometry(4, 4, 64, 64); // 64x64 细分以支持波浪
+            
             const material = new THREE.ShaderMaterial({
                 vertexShader,
                 fragmentShader,
@@ -222,46 +285,59 @@
                     uTime: { value: 0 },
                     uMouse: { value: new THREE.Vector2(0.5, 0.5) },
                     uTexture: { value: texture },
-                    uContainerSize: { value: new THREE.Vector2(container.clientWidth, container.clientHeight) },
-                    uImageSize: { value: new THREE.Vector2(texture.image.width, texture.image.height) }
+                    uImageRes: { value: new THREE.Vector2(texture.image.width, texture.image.height) },
+                    uContainerRes: { value: new THREE.Vector2(container.clientWidth, container.clientHeight) },
+                    uResolution: { value: new THREE.Vector2(container.clientWidth, container.clientHeight) }
                 }
             });
+
             const mesh = new THREE.Mesh(geometry, material);
             scene.add(mesh);
 
-            // 交互逻辑
+            // 6. 交互逻辑
             const clock = new THREE.Clock();
             let targetMouse = new THREE.Vector2(0.5, 0.5);
             let currentMouse = new THREE.Vector2(0.5, 0.5);
 
             document.addEventListener('mousemove', (e) => {
                 const rect = container.getBoundingClientRect();
-                // 只在鼠标接近头部区域时更新交互
-                if (e.clientY <= rect.bottom + 100) { 
-                   targetMouse.x = (e.clientX - rect.left) / rect.width;
-                   targetMouse.y = 1.0 - (e.clientY - rect.top) / rect.height;
+                if (e.clientY <= rect.bottom + 100) {
+                    // 将鼠标坐标映射到 0-1 空间
+                    targetMouse.x = (e.clientX - rect.left) / rect.width;
+                    targetMouse.y = 1.0 - (e.clientY - rect.top) / rect.height;
                 }
             });
 
             function animate() {
                 requestAnimationFrame(animate);
-                material.uniforms.uTime.value = clock.getElapsedTime();
                 
-                // 鼠标移动平滑插值
+                const time = clock.getElapsedTime();
+                material.uniforms.uTime.value = time;
+
+                // 鼠标平滑插值 (Lerp)
                 currentMouse.x += (targetMouse.x - currentMouse.x) * 0.05;
                 currentMouse.y += (targetMouse.y - currentMouse.y) * 0.05;
                 material.uniforms.uMouse.value = currentMouse;
-                
-                renderer.render(scene, camera);
+
+                // 使用 composer 渲染 (包含辉光)
+                composer.render();
             }
             animate();
-            
-            // 响应式窗口调整
+
+            // 7. 响应式处理 (修复缩放问题的关键)
             window.addEventListener('resize', () => {
                 const w = container.clientWidth;
                 const h = container.clientHeight;
+                
                 renderer.setSize(w, h);
-                material.uniforms.uContainerSize.value.set(w, h);
+                composer.setSize(w, h);
+                
+                camera.aspect = w / h;
+                camera.updateProjectionMatrix();
+
+                // 更新 Shader 中的屏幕分辨率，重新计算 Cover 比例
+                material.uniforms.uContainerRes.value.set(w, h);
+                material.uniforms.uResolution.value.set(w, h);
             });
         });
     </script>
