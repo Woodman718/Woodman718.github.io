@@ -5,8 +5,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="Academic Webpage" />
-    <meta name="author" content="Cai Songbai" />
-    <title id="title">Woodman - Academic Homepage</title>
+    <meta name="author" content="yixin0313" />
+    <title id="title"></title>
 
     <!-- Icon -->
     <link rel="icon" type="image/x-icon" href="static/assets/favicon.ico" />
@@ -16,48 +16,75 @@
 
     <!-- Google fonts-->
     <link rel="preconnect" href="https://fonts.gstatic.com" />
-    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,600;1,600&amp;display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,300;0,500;0,600;0,700;1,300;1,500;1,600;1,700&amp;display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,400;1,400&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,600;1,600&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,300;0,500;0,600;0,700;1,300;1,500;1,600;1,700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,400;1,400&amp;display=swap"
+        rel="stylesheet" />
 
     <!-- Core theme CSS (includes Bootstrap)-->
     <link type="text/css" href="static/css/styles.css" rel="stylesheet" />
     <link type="text/css" href="static/css/main.css" rel="stylesheet" />
 
-    <!-- Three.js Import Map (CDN) -->
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
-            }
-        }
-    </script>
-
-    <!-- Markdown & Tools -->
+    <!-- Bootstrap core JS-->
     <script type="text/javascript" src="static/js/bootstrap.bundle.min.js"></script>
+
+    <!-- For Compatability -->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+    <!-- Markdown -->
     <script type="text/javascript" src="static/js/marked.min.js"></script>
-    <script type="text/javascript" src="static/js/js-yaml.min.js"></script>
 
     <!-- Mathematics -->
     <script>
+        // See https://docs.mathjax.org/en/latest/index.html for more details.
         MathJax = {
             tex: {
-                inlineMath: [['$', '$'], ['\\(', '\\)']],
-                displayMath: [['$$', '$$'], ['\\[', '\\]']],
-                processEscapes: true,
-                processEnvironments: true
+                packages: {},              // extensions to use
+                inlineMath: [              // start/end delimiter pairs for in-line math
+                    ['$', '$'],
+                    ['\\(', '\\)']
+                ],
+                displayMath: [             // start/end delimiter pairs for display math
+                    ['$$', '$$'],
+                    ['\\[', '\\]']
+                ],
+                processEscapes: false,      // use \$ to produce a literal dollar sign
+                processEnvironments: true, // process \begin{xxx}...\end{xxx} outside math mode
+                processRefs: true,         // process \ref{...} outside of math mode
+                digits: /^(?:[0-9]+(?:\{,\}[0-9]{3})*(?:\.[0-9]*)?|\.[0-9]+)/,    // pattern for recognizing numbers
+                tags: 'all',              // or 'ams' or 'all'
+                tagSide: 'right',          // side for \tag macros
+                tagIndent: '0.8em',        // amount to indent tags
+                useLabelIds: true,         // use label name rather than tag for ids
+                maxMacros: 10000,          // maximum number of macro substitutions per expression
+                maxBuffer: 5 * 1024,       // maximum size for the internal TeX string (5K)
+                // baseURL:                   // URL for use with links to tags (when there is a <base> tag in effect)
+                // (document.getElementsByTagName('base').length === 0) ? '' : String(document.location).replace(/#.*$/, ''),
+                formatError:               // function called when TeX syntax errors occur
+                    (jax, err) => jax.formatError(err)
             }
         };
     </script>
-    <script type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+    <script type="text/javascript" id="MathJax-script"
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Core JS-->
+    <script type="text/javascript" src="static/js/scripts.js"></script>
+    <script type="text/javascript" src="static/js/js-yaml.min.js"></script>
+
 </head>
 
 <body id="page-top">
     <!-- Navigation-->
     <nav class="header navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
         <div class="container px-5">
-            <a id="page-top-title" class="navbar-brand fw-bold" href="#page-top">Woodman</a>
+            <a id="page-top-title" class="navbar-brand fw-bold" href="#page-top"></a>
+            <!-- <a href="#page-top"><img src="static/assets/img/CUMT_LOGO.svg" style="width: 11rem;"></a> -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
                 aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 MENU
@@ -65,37 +92,52 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
-                    <li class="nav-item"><a class="nav-link me-lg-3" href="#home">HOME</a></li>
-                    <li class="nav-item"><a class="nav-link me-lg-3" href="#publications">PUBLICATIONS</a></li>
-                    <li class="nav-item"><a class="nav-link me-lg-3" href="#experience">EXPERIENCE</a></li>
-                    <li class="nav-item"><a class="nav-link me-lg-3" href="#awards">AWARDS</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link me-lg-3" href="#home">HOME</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link me-lg-3" href="#publications">PUBLICATIONS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link me-lg-3" href="#experience">EXPERIENCE</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link me-lg-3" href="#awards">AWARDS</a>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- --- 3D Header Section (替换了原来的 .top-section) --- -->
-    <div id="canvas-container">
-        <div class="hero-overlay">
-            <!-- ID 保持不变，scripts.js 会自动填充这里的文字 -->
-            <h2 id="top-section-bg-text" class="display-3 lh-1 font-alt">Loading...</h2>
+    <!-- Top Section -->
+    <section class="top-section" style="background-image: url('static/assets/img/background2.jpeg');">
+        <div class="top-section-content">
+            <div class="container px-5">
+                <h2 id="top-section-bg-text" class="text-white display-3 lh-1 font-alt"></h2>
+            </div>
+        </div>
+    </section>
+    <!-- Top Section -->
+
+    <!-- Photo -->
+    <div class="container px-5">
+        <div id="avatar">
+            <img class="shadow" src="static/assets/img/photo.png">
         </div>
     </div>
-
-    <!-- --- Photo Section (悬浮头像) --- -->
-    <div id="avatar-container">
-        <img src="static/assets/img/photo.png" alt="Cai Songbai" class="shadow">
-    </div>
+    <!-- Photo -->
 
     <!-- Home -->
     <section class="bg-gradient-primary-to-secondary-light mt5 md5" id="home">
         <div class="container px-5">
             <header>
                 <h2 id="home-subtitle"> </h2>
+                <!-- <span class="bi bi-list"></span> -->
             </header>
             <div class="main-body" id="home-md"></div>
         </div>
     </section>
+    <!-- Home -->
 
     <!-- Publications -->
     <section class="bg-gradient-primary-to-secondary-gray mt5 md5" id="publications">
@@ -104,8 +146,10 @@
                 <h2 id="publications-subtitle"><i class="bi bi-file-text-fill"></i>&nbsp;PUBLICATIONS</h2>
             </header>
             <div class="main-body" id="publications-md"></div>
+
         </div>
     </section>
+    <!-- Publications  -->
 
     <!-- Experience -->
     <section class="bg-gradient-primary-to-secondary-dark mt5 md5" id="experience">
@@ -116,6 +160,7 @@
             <div class="main-body" id="experience-md"></div>
         </div>
     </section>
+    <!-- Experience -->
 
     <!-- Awards -->
     <section class="bg-gradient-primary-to-secondary-light mt5 md5" id="awards">
@@ -124,146 +169,24 @@
                 <h2 id="awards-subtitle"><i class="bi bi-award-fill"></i>AWARDS </h2>
             </header>
             <div class="main-body" id="awards-md"></div>
+
         </div>
     </section>
+    <!-- Awards -->
 
     <!-- Footer-->
     <footer class="bg-bottom text-center py-5">
         <div class="container px-5">
             <div class="text-white-50 small">
                 <div id="copyright-text" class="mb-2"></div>
-                <a id="github-link" href="https://github.com/Woodman718">Github</a>
+                <a id="github-link" href="https://github.com/senli1073">Github</a>
+                <span class="mx-1">&middot;</span>
+                <a id="license-link"
+                    href="https://github.com/senli1073/senli1073.github.io/blob/main/LICENSE">License</a>
             </div>
         </div>
     </footer>
 
-    <!-- Core JS -->
-    <script type="text/javascript" src="static/js/scripts.js"></script>
-
-    <!-- --- Three.js 逻辑 (放在最后) --- -->
-    <script type="module">
-        import * as THREE from 'three';
-
-        // 1. 配置: 指向你现有的背景图
-        const bgImageURL = 'static/assets/img/background2.jpeg';
-        
-        const container = document.getElementById('canvas-container');
-        
-        // 2. 初始化场景
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(70, container.clientWidth / container.clientHeight, 0.01, 10);
-        camera.position.z = 1;
-
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        renderer.setSize(container.clientWidth, container.clientHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        container.appendChild(renderer.domElement);
-
-        // 3. Shader 代码 (液态变形特效)
-        const vertexShader = `
-            uniform float uTime;
-            uniform vec2 uMouse;
-            varying vec2 vUv;
-            varying float vWave;
-            void main() {
-                vUv = uv;
-                vec3 pos = position;
-                float dist = distance(uv, uMouse);
-                // 鼠标影响范围和强度
-                float decay = clamp(1.0 - dist * 2.5, 0.0, 1.0);
-                // 基础流动波浪 + 鼠标交互波浪
-                float wave = sin(uv.x * 5.0 + uTime * 0.5) * 0.02 + sin(uv.y * 6.0 + uTime * 0.5) * 0.02;
-                float mouseWave = sin(dist * 15.0 - uTime * 8.0) * 0.05 * decay;
-                pos.z += wave + mouseWave;
-                vWave = wave + mouseWave;
-                gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
-            }
-        `;
-
-        const fragmentShader = `
-            uniform sampler2D uTexture;
-            uniform vec2 uImageSize;
-            uniform vec2 uContainerSize;
-            varying vec2 vUv;
-            varying float vWave;
-            
-            // CSS 'background-size: cover' 的 GLSL 实现
-            vec2 getCoverUv(vec2 uv, vec2 resolution, vec2 texResolution) {
-                vec2 s = resolution;
-                vec2 i = texResolution;
-                float rs = s.x / s.y;
-                float ri = i.x / i.y;
-                vec2 new = rs < ri ? vec2(i.x * s.y / i.y, s.y) : vec2(s.x, i.y * s.x / i.x);
-                vec2 offset = (rs < ri ? vec2((new.x - s.x) / 2.0, 0.0) : vec2(0.0, (new.y - s.y) / 2.0)) / new;
-                return uv * s / new + offset;
-            }
-
-            void main() {
-                vec2 uv = getCoverUv(vUv, uContainerSize, uImageSize);
-                // RGB 色散效果 (Chromatic Aberration)
-                float r = texture2D(uTexture, uv + vWave * 0.03).r;
-                float g = texture2D(uTexture, uv).g;
-                float b = texture2D(uTexture, uv - vWave * 0.03).b;
-                
-                // 叠加黑色遮罩 (类似于 CSS rgba(0,0,0,0.4)) 以保证文字清晰度
-                vec3 color = vec3(r, g, b) * 0.6; 
-                gl_FragColor = vec4(color, 1.0);
-            }
-        `;
-
-        // 4. 加载材质并启动
-        const textureLoader = new THREE.TextureLoader();
-        textureLoader.load(bgImageURL, (texture) => {
-            const geometry = new THREE.PlaneGeometry(2, 2, 64, 64);
-            const material = new THREE.ShaderMaterial({
-                vertexShader,
-                fragmentShader,
-                uniforms: {
-                    uTime: { value: 0 },
-                    uMouse: { value: new THREE.Vector2(0.5, 0.5) },
-                    uTexture: { value: texture },
-                    uContainerSize: { value: new THREE.Vector2(container.clientWidth, container.clientHeight) },
-                    uImageSize: { value: new THREE.Vector2(texture.image.width, texture.image.height) }
-                }
-            });
-            const mesh = new THREE.Mesh(geometry, material);
-            scene.add(mesh);
-
-            // 交互逻辑
-            const clock = new THREE.Clock();
-            let targetMouse = new THREE.Vector2(0.5, 0.5);
-            let currentMouse = new THREE.Vector2(0.5, 0.5);
-
-            document.addEventListener('mousemove', (e) => {
-                const rect = container.getBoundingClientRect();
-                // 只在鼠标接近头部区域时更新交互
-                if (e.clientY <= rect.bottom + 100) { 
-                   targetMouse.x = (e.clientX - rect.left) / rect.width;
-                   targetMouse.y = 1.0 - (e.clientY - rect.top) / rect.height;
-                }
-            });
-
-            function animate() {
-                requestAnimationFrame(animate);
-                material.uniforms.uTime.value = clock.getElapsedTime();
-                
-                // 鼠标移动平滑插值
-                currentMouse.x += (targetMouse.x - currentMouse.x) * 0.05;
-                currentMouse.y += (targetMouse.y - currentMouse.y) * 0.05;
-                material.uniforms.uMouse.value = currentMouse;
-                
-                renderer.render(scene, camera);
-            }
-            animate();
-            
-            // 响应式窗口调整
-            window.addEventListener('resize', () => {
-                const w = container.clientWidth;
-                const h = container.clientHeight;
-                renderer.setSize(w, h);
-                material.uniforms.uContainerSize.value.set(w, h);
-            });
-        });
-    </script>
 </body>
+
 </html>
