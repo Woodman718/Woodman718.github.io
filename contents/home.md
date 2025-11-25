@@ -1,5 +1,3 @@
-[![Woodman718](https://img.shields.io/badge/Woodman718-github-blue?logo=github)](https://github.com/Woodman718)
-
 # Songbai Cai 
 
 Master of Engineering, Chongqing Jiaotong University
