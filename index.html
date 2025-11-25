@@ -1,91 +1,70 @@
-<!-- 找到 <head> 区域，在其他 css 链接下面添加这个 CSS 以确保 3D 画布样式正确 -->
-<style>
-    /* 新增的 3D Header 样式，稍后你可以移到 main.css 中 */
-    #canvas-container {
-        position: relative;
-        width: 100%;
-        height: 60vh; /* 这里的 60vh 替代了原本的 25rem */
-        overflow: hidden;
-        background: #000;
-        margin-top: 0; 
-    }
-    
-    /* 覆盖在 3D 上的文字容器 */
-    .hero-overlay {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 100%;
-        text-align: center;
-        z-index: 2;
-        pointer-events: none; /* 让鼠标穿透文字操作 3D */
-    }
+<!DOCTYPE html>
+<html lang="en">
 
-    /* 你的座右铭文字样式优化 */
-    #top-section-bg-text {
-        font-family: 'Newsreader', serif; /* 使用你引入的 Newsreader 字体 */
-        font-style: italic;
-        font-weight: 600;
-        color: rgba(255, 255, 255, 0.9);
-        text-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        mix-blend-mode: overlay; /* 让文字融入背景 */
-    }
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="Academic Webpage" />
+    <meta name="author" content="Cai Songbai" />
+    <title id="title">Woodman - Academic Homepage</title>
 
-    /* 调整头像位置，使其悬浮在 Header 和 内容之间 */
-    #avatar-container {
-        position: absolute;
-        top: 60vh; /* 跟随 Header 高度 */
-        right: 10%; /* 放在右侧，或者根据你的喜好调整 */
-        transform: translateY(-50%); /* 垂直居中于分界线 */
-        z-index: 100;
-    }
-    
-    #avatar-container img {
-        width: 180px; /* 调整头像大小 */
-        height: 180px;
-        object-fit: cover;
-        border: 4px solid white;
-        border-radius: 4px; /* 方形圆角比圆形更适合这种硬朗风格 */
-        box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-    }
-    
-    /* 移动端适配 */
-    @media (max-width: 768px) {
-        #avatar-container {
-            position: relative;
-            top: -50px;
-            right: auto;
-            transform: none;
-            display: flex;
-            justify-content: center;
-            margin-bottom: -50px;
+    <!-- Icon -->
+    <link rel="icon" type="image/x-icon" href="static/assets/favicon.ico" />
+
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+
+    <!-- Google fonts-->
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,600;1,600&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,300;0,500;0,600;0,700;1,300;1,500;1,600;1,700&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,400;1,400&amp;display=swap" rel="stylesheet" />
+
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link type="text/css" href="static/css/styles.css" rel="stylesheet" />
+    <link type="text/css" href="static/css/main.css" rel="stylesheet" />
+
+    <!-- Three.js Import Map (CDN) -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
+            }
         }
-    }
-</style>
+    </script>
 
-<!-- 引入 Three.js 映射 -->
-<script type="importmap">
-    {
-        "imports": {
-            "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
-        }
-    }
-</script>
+    <!-- Markdown & Tools -->
+    <script type="text/javascript" src="static/js/bootstrap.bundle.min.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script type="text/javascript" src="static/js/marked.min.js"></script>
+    <script type="text/javascript" src="static/js/js-yaml.min.js"></script>
+
+    <!-- Mathematics -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true
+            }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 </head>
 
 <body id="page-top">
-    <!-- 导航栏保持不变 (建议稍后在 CSS 中将背景改为半透明) -->
+    <!-- Navigation-->
     <nav class="header navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
-        <!-- ... 你的导航栏代码保持原样 ... -->
         <div class="container px-5">
             <a id="page-top-title" class="navbar-brand fw-bold" href="#page-top">Woodman</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
                 aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                MENU <i class="bi-list"></i>
+                MENU
+                <i class="bi-list"></i>
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
-                 <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
+                <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
                     <li class="nav-item"><a class="nav-link me-lg-3" href="#home">HOME</a></li>
                     <li class="nav-item"><a class="nav-link me-lg-3" href="#publications">PUBLICATIONS</a></li>
                     <li class="nav-item"><a class="nav-link me-lg-3" href="#experience">EXPERIENCE</a></li>
@@ -95,28 +74,21 @@
         </div>
     </nav>
 
-    <!-- [删除] 原来的 <section class="top-section"> ... </section> -->
-    
-    <!-- [新增] 3D Header 区域 -->
+    <!-- --- 3D Header Section (替换了原来的 .top-section) --- -->
     <div id="canvas-container">
-        <!-- 这里的文字容器 ID 保持原样，为了兼容你现有的 scripts.js 填充文字 -->
         <div class="hero-overlay">
-            <h2 id="top-section-bg-text" class="display-3 lh-1">
-                Endless training,<br>boundless exploration
-            </h2>
+            <!-- ID 保持不变，scripts.js 会自动填充这里的文字 -->
+            <h2 id="top-section-bg-text" class="display-3 lh-1 font-alt">Loading...</h2>
         </div>
     </div>
 
-    <!-- [修改] 头像区域 -->
-    <!-- 我重新包装了一个 ID 以便更好地控制悬浮位置 -->
+    <!-- --- Photo Section (悬浮头像) --- -->
     <div id="avatar-container">
-        <img src="static/assets/img/photo.png" alt="Profile Photo">
+        <img src="static/assets/img/photo.png" alt="Cai Songbai" class="shadow">
     </div>
 
-    <!-- 下面的 Home, Publications 等 Section 保持原样即可 -->
     <!-- Home -->
-    <section class="bg-gradient-primary-to-secondary-light mt5 md5" id="home" style="padding-top: 80px;">
-        <!-- ... 保持原样 ... -->
+    <section class="bg-gradient-primary-to-secondary-light mt5 md5" id="home">
         <div class="container px-5">
             <header>
                 <h2 id="home-subtitle"> </h2>
@@ -124,22 +96,60 @@
             <div class="main-body" id="home-md"></div>
         </div>
     </section>
-    
-    <!-- ... Publications, Experience, Awards, Footer 保持原样 ... -->
 
-    <!-- ... 你的其他 script 引用 ... -->
+    <!-- Publications -->
+    <section class="bg-gradient-primary-to-secondary-gray mt5 md5" id="publications">
+        <div class="container px-5">
+            <header>
+                <h2 id="publications-subtitle"><i class="bi bi-file-text-fill"></i>&nbsp;PUBLICATIONS</h2>
+            </header>
+            <div class="main-body" id="publications-md"></div>
+        </div>
+    </section>
+
+    <!-- Experience -->
+    <section class="bg-gradient-primary-to-secondary-dark mt5 md5" id="experience">
+        <div class="container px-5">
+            <header>
+                <h2 id="experience-subtitle"><i class="bi bi-briefcase-fill"></i> EXPERIENCE </h2>
+            </header>
+            <div class="main-body" id="experience-md"></div>
+        </div>
+    </section>
+
+    <!-- Awards -->
+    <section class="bg-gradient-primary-to-secondary-light mt5 md5" id="awards">
+        <div class="container px-5">
+            <header>
+                <h2 id="awards-subtitle"><i class="bi bi-award-fill"></i>AWARDS </h2>
+            </header>
+            <div class="main-body" id="awards-md"></div>
+        </div>
+    </section>
+
+    <!-- Footer-->
+    <footer class="bg-bottom text-center py-5">
+        <div class="container px-5">
+            <div class="text-white-50 small">
+                <div id="copyright-text" class="mb-2"></div>
+                <a id="github-link" href="https://github.com/Woodman718">Github</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Core JS -->
     <script type="text/javascript" src="static/js/scripts.js"></script>
 
-    <!-- [新增] 放在 </body> 之前：Three.js 核心逻辑 -->
+    <!-- --- Three.js 逻辑 (放在最后) --- -->
     <script type="module">
         import * as THREE from 'three';
 
-        // 配置：使用你原来的背景图路径
-        const bgImageURL = 'static/assets/img/background2.jpeg'; 
+        // 1. 配置: 指向你现有的背景图
+        const bgImageURL = 'static/assets/img/background2.jpeg';
         
         const container = document.getElementById('canvas-container');
         
-        // 1. 初始化场景
+        // 2. 初始化场景
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(70, container.clientWidth / container.clientHeight, 0.01, 10);
         camera.position.z = 1;
@@ -149,7 +159,7 @@
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         container.appendChild(renderer.domElement);
 
-        // 2. Shader (液态扭曲特效)
+        // 3. Shader 代码 (液态变形特效)
         const vertexShader = `
             uniform float uTime;
             uniform vec2 uMouse;
@@ -159,9 +169,11 @@
                 vUv = uv;
                 vec3 pos = position;
                 float dist = distance(uv, uMouse);
-                float decay = clamp(1.0 - dist * 3.0, 0.0, 1.0);
-                float wave = sin(uv.x * 10.0 + uTime) * 0.01 + sin(uv.y * 12.0 + uTime * 0.8) * 0.01;
-                float mouseWave = sin(dist * 20.0 - uTime * 5.0) * 0.03 * decay;
+                // 鼠标影响范围和强度
+                float decay = clamp(1.0 - dist * 2.5, 0.0, 1.0);
+                // 基础流动波浪 + 鼠标交互波浪
+                float wave = sin(uv.x * 5.0 + uTime * 0.5) * 0.02 + sin(uv.y * 6.0 + uTime * 0.5) * 0.02;
+                float mouseWave = sin(dist * 15.0 - uTime * 8.0) * 0.05 * decay;
                 pos.z += wave + mouseWave;
                 vWave = wave + mouseWave;
                 gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
@@ -175,6 +187,7 @@
             varying vec2 vUv;
             varying float vWave;
             
+            // CSS 'background-size: cover' 的 GLSL 实现
             vec2 getCoverUv(vec2 uv, vec2 resolution, vec2 texResolution) {
                 vec2 s = resolution;
                 vec2 i = texResolution;
@@ -187,16 +200,18 @@
 
             void main() {
                 vec2 uv = getCoverUv(vUv, uContainerSize, uImageSize);
-                // RGB Shift 色散效果
-                float r = texture2D(uTexture, uv + vWave * 0.02).r;
+                // RGB 色散效果 (Chromatic Aberration)
+                float r = texture2D(uTexture, uv + vWave * 0.03).r;
                 float g = texture2D(uTexture, uv).g;
-                float b = texture2D(uTexture, uv - vWave * 0.02).b;
-                // 稍微压暗一点背景，让文字更突出
-                gl_FragColor = vec4(vec3(r, g, b) * 0.8, 1.0);
+                float b = texture2D(uTexture, uv - vWave * 0.03).b;
+                
+                // 叠加黑色遮罩 (类似于 CSS rgba(0,0,0,0.4)) 以保证文字清晰度
+                vec3 color = vec3(r, g, b) * 0.6; 
+                gl_FragColor = vec4(color, 1.0);
             }
         `;
 
-        // 3. 加载图片并运行
+        // 4. 加载材质并启动
         const textureLoader = new THREE.TextureLoader();
         textureLoader.load(bgImageURL, (texture) => {
             const geometry = new THREE.PlaneGeometry(2, 2, 64, 64);
@@ -214,14 +229,14 @@
             const mesh = new THREE.Mesh(geometry, material);
             scene.add(mesh);
 
-            // 交互
+            // 交互逻辑
             const clock = new THREE.Clock();
             let targetMouse = new THREE.Vector2(0.5, 0.5);
             let currentMouse = new THREE.Vector2(0.5, 0.5);
 
             document.addEventListener('mousemove', (e) => {
                 const rect = container.getBoundingClientRect();
-                // 只有鼠标在 header 区域或附近时才触发强烈波纹
+                // 只在鼠标接近头部区域时更新交互
                 if (e.clientY <= rect.bottom + 100) { 
                    targetMouse.x = (e.clientX - rect.left) / rect.width;
                    targetMouse.y = 1.0 - (e.clientY - rect.top) / rect.height;
@@ -230,21 +245,22 @@
 
             function animate() {
                 requestAnimationFrame(animate);
-                const time = clock.getElapsedTime();
-                material.uniforms.uTime.value = time;
+                material.uniforms.uTime.value = clock.getElapsedTime();
+                
+                // 鼠标移动平滑插值
                 currentMouse.x += (targetMouse.x - currentMouse.x) * 0.05;
                 currentMouse.y += (targetMouse.y - currentMouse.y) * 0.05;
                 material.uniforms.uMouse.value = currentMouse;
+                
                 renderer.render(scene, camera);
             }
             animate();
             
+            // 响应式窗口调整
             window.addEventListener('resize', () => {
                 const w = container.clientWidth;
                 const h = container.clientHeight;
                 renderer.setSize(w, h);
-                camera.aspect = w / h;
-                camera.updateProjectionMatrix();
                 material.uniforms.uContainerSize.value.set(w, h);
             });
         });
