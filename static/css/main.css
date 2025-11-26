@@ -1,112 +1,188 @@
 @import "./styles.css";
 
-
-:root{
-    --h-title-color:#3948d2;
+/* --- 1. 全局变量与字体 --- */
+:root {
+    --font-serif: 'Newsreader', 'Playfair Display', serif;
+    --font-sans: 'Mulish', 'Inter', sans-serif;
+    --color-primary: #2937f0;
+    --color-text-main: #1e293b;
+    --color-text-muted: #64748b;
+    --banner-height: 50vh; /* Banner 高度 */
 }
 
+body {
+    font-family: var(--font-sans);
+    color: var(--color-text-main);
+    line-height: 1.7;
+    background-color: #fff;
+}
+
+/* --- 2. 导航栏 (毛玻璃) --- */
 .header {
-    border-bottom: solid 2px var(--bs-blue);
-    z-index: 10000;
+    background-color: rgba(255, 255, 255, 0.85) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+#mainNav .navbar-brand {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+#mainNav .nav-link {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--color-text-muted) !important;
+}
+#mainNav .nav-link.active {
+    color: var(--color-primary) !important;
 }
 
-.bg-bottom {
-    background-color: var(--h-title-color);
-}
-
-.top-section {
+/* --- 3. 3D Banner 区域 --- */
+#canvas-container {
     position: relative;
-    padding: 10rem 0;
-    background-position: center;
-    background-size: cover;
-    height: 25rem;
+    width: 100%;
+    height: var(--banner-height);
+    background-color: #050505; /* 深黑背景适配液态金属 */
+    overflow: hidden;
+    margin-bottom: 0;
+}
+#canvas-container canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
 }
 
-.top-section h2 {
-    font-weight: 400;
-}
-
-.top-section .top-section-content {
-    position: relative;
-    z-index: 1;
-}
-
-.top-section:before {
-    content: "";
+/* 覆盖在 3D 上的文字 (你的座右铭) */
+.hero-overlay {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    text-align: center;
+    z-index: 2;
+    pointer-events: none; /* 鼠标穿透，不影响 3D 交互 */
 }
 
-section header h2{
-    font-family: "Kanit", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
-    color: var(--h-title-color);
-    font-size: 2.3rem;
-    line-height: 4rem;
+#top-section-bg-text {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.95);
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+    margin: 0;
 }
 
-section .main-body{
-    font-size: 1.3rem;
-    font-weight: 200;
-    line-height: 2.4rem;
-}
-
-
-.bg-gradient-primary-to-secondary-light {
-    background: linear-gradient(45deg, #fcfcfc, #ffffff) !important;
-}
-
-.bg-gradient-primary-to-secondary-gray {
-    background: linear-gradient(45deg, #f0f0f0, #f1f1f1) !important;
-}
-
-
-
-.on-top {
-    position: relative;
-    z-index: 10000;
-}
-
-.top-bg {
-    background-position: center;
-    background-size: fill;
-    width: 100%;
-    height: 100%;
-}
-
-.top-bg::before {
-    content: "";
+/* --- 4. 头像区域 (带白色边框) --- */
+#avatar-container {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.4);
+    top: var(--banner-height); /* 刚好压在 Banner 底线上 */
+    right: 15%; /* 放在右侧，和截图一致 */
+    transform: translateY(-50%); /* 垂直居中于分界线 */
+    z-index: 100;
 }
 
-
-#avatar {
-    position: relative;
-    height: 0;
-    top:min(-65px,max(-100px,calc(-1*100vw/12)));
-    max-width: 55em;
-    margin: 0 1.5rem 0 0;
-    float: right;
-    z-index: 9000;
+#avatar-container img {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    /* 核心修改：白色粗边框 */
+    border: 6px solid #fff; 
+    border-radius: 4px; /* 微圆角 */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* 阴影增加立体感 */
+    background-color: #fff;
+    transition: transform 0.3s ease;
 }
 
-#avatar img {
-    height: max(130px,min(200px,calc(100vw/6)));
-    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+#avatar-container img:hover {
+    transform: scale(1.02);
 }
 
+/* --- 5. 内容排版 (复刻截图风格) --- */
+section {
+    padding-top: 5rem;
+    padding-bottom: 3rem;
+}
+
+/* 标题：衬线体 */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    color: #0f172a;
+}
+
+/* 左侧蓝条样式的 Section 标题 */
+section header h2 {
+    font-family: var(--font-sans) !important;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--color-text-muted);
+    
+    /* 蓝条 */
+    border-left: 4px solid var(--color-primary);
+    padding-left: 15px;
+    margin-bottom: 2.5rem;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+}
+/* 隐藏图标，保持极简 */
+section header h2 i { display: none; }
+
+/* 正文优化 */
+.main-body {
+    font-size: 1.05rem;
+    color: #334155;
+}
+.main-body h1 { font-size: 3rem; margin-bottom: 0.5rem; }
+.main-body h3 { 
+    font-size: 1.4rem; 
+    margin-top: 2rem; 
+    border-bottom: 1px solid #eee; 
+    padding-bottom: 0.5rem;
+}
+
+/* 胶囊标签 (Code 样式) */
+.main-body code {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #0369a1;
+    background-color: #e0f2fe;
+    padding: 4px 12px;
+    border-radius: 50px;
+    margin-right: 6px;
+    display: inline-block;
+    border: none;
+}
+
+/* 链接 */
+.main-body a {
+    color: var(--color-primary);
+    text-decoration: none;
+    border-bottom: 1px dashed rgba(41, 55, 240, 0.3);
+}
+.main-body a:hover { border-bottom-style: solid; }
+/* 排除 Github 图片链接的边框 */
+.main-body a:has(img), .main-body a img { border: none; box-shadow: none; }
+
+/* --- 6. 移动端适配 --- */
 @media screen and (max-width: 991px) {
-    #avatar {
-        margin: 0;
+    :root { --banner-height: 40vh; }
+    #avatar-container {
+        right: auto;
+        left: 50%;
+        transform: translate(-50%, -50%);
     }
+    #top-section-bg-text { font-size: 2.5rem; }
 }
 
-
+/* Footer */
+footer { background-color: #0f172a !important; color: rgba(255,255,255,0.6); }
+footer a { color: #fff; border-bottom: 1px dashed rgba(255,255,255,0.3); }
