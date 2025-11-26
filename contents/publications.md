@@ -2,4 +2,4 @@
 
 - DASENet:A Detail Aware U-Net with Shuffle Excitation for Retinal Vessel Segmentation,DOI: 10.1109/CSECS60003.2023.10428317.
 
-- DASENet: A Detail Aware U-Net with Shuffle Excitation for Retinal Vessel Segmentation,DOI:10.1109/CSECS60003.2023.10428317.
+- CrackNet: A Backbone Network for Pavement Crack Analysis,DOI:10.1109/CSECS60003.2023.10428479.  
